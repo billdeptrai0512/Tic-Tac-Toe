@@ -12,7 +12,6 @@ const player = (name , mark) => {
 const playerOne = player("Bill" , "x");
 const playerTwo = player("Diu Anh", "o");
 
-
 const boardModule = (() => {
     const cells = document.querySelectorAll('[data-cell]');
     const board = [];
@@ -36,15 +35,25 @@ const boardModule = (() => {
             }
         }
     }
+
+    function handleClick (e) {
+        console.log(e.target.classList);
+        e.target.classList.add(activePlayer.mark);
+        lastMove = getIndexOfK(board, e.target)
+        checkWin(activePlayer.mark, lastMove)
+        switchPlayerTurn();
+    }
     
-    cells.forEach((cell) => {
-        cell.addEventListener('click', () => {
-            cell.classList.add(activePlayer.mark);
-            lastMove = getIndexOfK(board, cell)
-            checkWin(activePlayer.mark, lastMove)
-            switchPlayerTurn();
-        }, { once: true})
-    });
+    function startGame() {
+        cells.forEach((cell) => {
+            cell.classList.remove(playerOne.mark, playerTwo.mark)
+            cell.removeEventListener('click', handleClick)
+            cell.addEventListener('click', handleClick, { once: true})
+        });
+        
+    }
+    
+    startGame();
 
     let lastMove;
     let activePlayer = playerOne;
@@ -62,6 +71,7 @@ const boardModule = (() => {
 
     function checkWin(mark, lastMove) {
         let win = false;
+        let winningPlayer;
         let requireCountWin = 5;
         for (i = 0; i < lineDirection.length & !win; i++) {
             let shift = lineDirection[i];
@@ -72,7 +82,6 @@ const boardModule = (() => {
                 countWin++;
                 currentSquare[0] += shift[0];
                 currentSquare[1] += shift[1];
-                
             }
 
             currentSquare = [lastMove[0] - shift[0], lastMove[1] - shift[1]];
@@ -82,20 +91,39 @@ const boardModule = (() => {
                 currentSquare[0] -= shift[0];
                 currentSquare[1] -= shift[1];
             }
-            console.log(countWin)
 
             if(countWin >= requireCountWin) {
                 win = true;      
-                console.log('be diu de thuong')
+                winningPlayer = activePlayer
+                restartGame(winningPlayer)
             }
         }
-        return win;
+        return win, winningPlayer;
     }
 
     function legalSquare(square) {
         return square[0] < board.length && square[1] < board.length && square[0] >= 0 && square[1] >= 0; 
     }
 
+
+    function restartGame(player) {
+        const winningScreen = document.querySelector('.winning-message');
+        const winningMessage = document.querySelector('[data-winning-message-text]');
+        winningScreen.classList.add('show');
+        winningMessage.textContent = player.name + " Win";
+    
+        const winningButton = document.querySelector('#restartButton');
+        const cells = document.querySelectorAll('[data-cell]');
+    
+        winningButton.addEventListener('click', () => {
+            winningScreen.classList.remove('show');
+            startGame();
+        })
+        return
+    }
 })();
+
+
+
 
 
