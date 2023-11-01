@@ -12,13 +12,14 @@ const player = (name , mark) => {
 const playerOne = player("Bill" , "x");
 const playerTwo = player("Diu Anh", "o");
 
+
 const boardModule = (() => {
     const cells = document.querySelectorAll('[data-cell]');
     const board = [];
     
-    for (let r = 0; r <= 15; r++) {
+    for (let r = 0; r < 15; r++) {
         board[r] = [];
-        for (let c = 0; c <= 15; c++) {
+        for (let c = 0; c < 15; c++) {
             if ( r === 0 ) {
                 board[r].push(cells[c])
             } else if (r > 0)  {
@@ -36,26 +37,50 @@ const boardModule = (() => {
         }
     }
 
-    function handleClick (e) {
-        console.log(e.target.classList);
-        e.target.classList.add(activePlayer.mark);
-        lastMove = getIndexOfK(board, e.target)
-        checkWin(activePlayer.mark, lastMove)
-        switchPlayerTurn();
-    }
-    
     function startGame() {
         cells.forEach((cell) => {
             cell.classList.remove(playerOne.mark, playerTwo.mark)
             cell.removeEventListener('click', handleClick)
-            cell.addEventListener('click', handleClick, { once: true})
-        });
-        
+            cell.addEventListener('click', handleClick, { once: true})       
+        });    
     }
     
     startGame();
 
-    let lastMove;
+
+    function handleClick (e) {
+        if (e.target.classList.contains(playerTwo.mark) || 
+            (e.target.classList.contains(playerOne.mark))) {
+            return
+        }
+        e.target.classList.add(activePlayer.mark);
+        let lastMove = getIndexOfK(board, e.target);
+        checkWin(activePlayer.mark, lastMove);
+        switchPlayerTurn();
+        makeMove();
+        switchPlayerTurn();
+    }
+
+    function makeMove() {
+        //create empty board - update it
+        let available = [];
+        for ( i = 0 ; i < 15 ; i++) {
+            available[i] = []
+            for ( j = 0 ; j < 15 ; j++ ) {
+                // console.log(board[i][j])
+                if (!(board[i][j].classList.contains(playerOne.mark) || board[i][j].classList.contains(activePlayer.mark))) {
+                    available[i].push(board[i][j])
+                }
+            }
+        }
+        //make random move
+        let number = Math.floor(Math.random() * available.length)
+        let move = available[number][Math.floor(Math.random()* available[number].length)]
+        move.classList.add(activePlayer.mark)
+        let lastMove = getIndexOfK(board, move)
+        return checkWin(activePlayer.mark, lastMove)
+        //bug that user can double click to the cell that bot click - fixed
+    }
     let activePlayer = playerOne;
 
     const switchPlayerTurn = () => {
@@ -78,13 +103,18 @@ const boardModule = (() => {
             let currentSquare = [lastMove[0] + shift[0], lastMove[1] + shift[1]];
             let countWin = 1;
 
-            while (countWin < requireCountWin && legalSquare(currentSquare) && board[currentSquare[0]][currentSquare[1]].classList.contains(mark) === true ) {
+
+            while (countWin < requireCountWin && legalSquare(currentSquare) && board[currentSquare[0]][currentSquare[1]].classList.contains(mark) === true) {
                 countWin++;
                 currentSquare[0] += shift[0];
                 currentSquare[1] += shift[1];
             }
 
             currentSquare = [lastMove[0] - shift[0], lastMove[1] - shift[1]];
+
+            if (board[currentSquare[0]] === undefined) {
+                return
+            }
 
             while (countWin < requireCountWin && legalSquare(currentSquare) && board[currentSquare[0]][currentSquare[1]].classList.contains(mark) === true) {
                 countWin++
@@ -99,6 +129,7 @@ const boardModule = (() => {
             }
         }
         return win, winningPlayer;
+        //bug when user click bottom of board
     }
 
     function legalSquare(square) {
