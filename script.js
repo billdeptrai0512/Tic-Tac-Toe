@@ -15,6 +15,9 @@ const playerTwo = player("Diu Anh", "o");
 
 const boardModule = (() => {
     const cells = document.querySelectorAll('[data-cell]');
+    const winningScreen = document.querySelector('.winning-message');
+    const winningMessage = document.querySelector('[data-winning-message-text]');
+    const winningButton = document.querySelector('#restartButton');
     const board = [];
     
     for (let r = 0; r < 15; r++) {
@@ -47,6 +50,7 @@ const boardModule = (() => {
     
     startGame();
 
+    let lastMove;
 
     function handleClick (e) {
         if (e.target.classList.contains(playerTwo.mark) || 
@@ -54,33 +58,127 @@ const boardModule = (() => {
             return
         }
         e.target.classList.add(activePlayer.mark);
-        let lastMove = getIndexOfK(board, e.target);
+        lastMove = getIndexOfK(board, e.target);
         checkWin(activePlayer.mark, lastMove);
         switchPlayerTurn();
         makeMove();
-        switchPlayerTurn();
     }
 
     function makeMove() {
-        //create empty board - update it
-        let available = [];
-        for ( i = 0 ; i < 15 ; i++) {
+        //Search for empty cell
+        // let bestScore = -Infinity;
+        // let move;
+        // for (let i = 0 ; i < board.length; i++) {
+        //     for (let j = 0; j < board[i].length; j++) {
+        //         if (availableCell(board[i][j])) {
+        //             board[i][j].classList.add(activePlayer.mark)
+        //             lastMove = getIndexOfK(board, board[i][j])
+        //             let score = minimax(board, true, -Infinity, Infinity);
+        //             board[i][j].classList.remove(activePlayer.mark)
+        //         }   
+        //         if (score > bestScore) {
+        //             bestScore = score;
+        //             move = {i , j};
+        //         }
+        //     }
+        // }
+
+        let available = availableBoard();
+        let number = Math.floor(Math.random() * available.length)
+        move = available[number][Math.floor(Math.random()* available[number].length)]
+        move.classList.add(activePlayer.mark);
+        lastMove = getIndexOfK(board, move);
+        checkWin(activePlayer.mark, lastMove);
+        
+        switchPlayerTurn();
+        return
+        //bug that user can double click to the cell that bot click - fixed
+    }
+    
+
+   
+
+    //make the function to find all empty cell in board - push it to an array
+    // find 5x5 available cell after lastMove
+    function availableBoard(cell) {
+        let available = []
+        // this.cell = cell;
+        // if (!cell.classList.contains(playerOne.mark) || cell.classList.contains(playerTwo.mark)) {
+        //     return true
+        // }
+        for ( let i = 0 ; i < 15 ; i++) {
             available[i] = []
-            for ( j = 0 ; j < 15 ; j++ ) {
+            for ( let j = 0 ; j < 15 ; j++ ) {
                 // console.log(board[i][j])
-                if (!(board[i][j].classList.contains(playerOne.mark) || board[i][j].classList.contains(activePlayer.mark))) {
+                if (!(board[i][j].classList.contains(playerOne.mark) || board[i][j].classList.contains(playerTwo.mark))) {
                     available[i].push(board[i][j])
                 }
             }
         }
-        //make random move
-        let number = Math.floor(Math.random() * available.length)
-        let move = available[number][Math.floor(Math.random()* available[number].length)]
-        move.classList.add(activePlayer.mark)
-        let lastMove = getIndexOfK(board, move)
-        return checkWin(activePlayer.mark, lastMove)
-        //bug that user can double click to the cell that bot click - fixed
+        return available
     }
+
+    const scores = {
+        x: 1,
+        o: -1,
+        tie: 0
+    };
+
+    // This function is not work and still need to improve - i will comeback with this after i finish the course
+    // function minimax(board, isMaximize, alpha, beta) {
+    //     let result = checkWin(activePlayer.mark, lastMove);
+    //     console.log(result)
+    //     if (result !== undefined) {
+    //         return scores[`${result.mark}`]
+    //     }
+
+    //     if (isMaximize) {
+    //         let bestScore = -Infinity;
+    //         for (let i = 0; i < board.length; i++) {
+    //             for (let j = 0; j < board[i].length; j++) {
+    //                 if (availableCell(board[i][j])) {
+    //                     board[i][j].classList.add(playerOne.mark)
+    //                     lastMove = getIndexOfK(board, board[i][j])
+    //                     let score = minimax(board, false, alpha, beta);
+                  
+    //                     board[i][j].classList.remove(playerOne.mark)
+    //                     bestScore = Math.max(score, bestScore);
+    //                     alpha = Math.max(alpha, bestScore);
+    //                     if(beta <= alpha) {
+    //                         break
+    //                     }  
+    //                 }   
+    //             }             
+    //         }
+    //         return bestScore
+
+    //     } else {
+    //         let bestScore = Infinity
+    //         for (let i = 0; i < board.length; i++) {
+    //             for (let j = 0; i < board[i].length; j++) {
+    //                 if (availableCell(board[i][j])) {
+    //                     board[i][j].classList.add(playerTwo.mark)
+    //                     lastMove = getIndexOfK(board, board[i][j])             
+    //                     let score = minimax(board, true, alpha, beta);
+    //                     console.log(score)
+    //                     board[i][j].classList.remove(playerTwo.mark)
+    //                     bestScore = Math.min(score, bestScore);
+    //                     alpha = Math.min(alpha, bestScore);
+                        
+    //                     if (beta <= alpha) {
+    //                         break
+    //                     }
+    //                 }
+                    
+    //             }
+                
+    //         }
+    //         return bestScore;
+    //     }
+    // }
+
+
+
     let activePlayer = playerOne;
 
     const switchPlayerTurn = () => {
@@ -93,6 +191,7 @@ const boardModule = (() => {
         [1, -1], //diagonal1
         [1, 1], //diagonal2
     ]
+
 
     function checkWin(mark, lastMove) {
         let win = false;
@@ -125,26 +224,40 @@ const boardModule = (() => {
             if(countWin >= requireCountWin) {
                 win = true;      
                 winningPlayer = activePlayer
+                
+                restartGame(winningPlayer)
+
+            } else if (fullBoard() === true && countWin < requireCountWin) {
+                winningPlayer = 'tie'
                 restartGame(winningPlayer)
             }
-        }
-        return win, winningPlayer;
-        //bug when user click bottom of board
+        }   //bug when user click bottom of board - flxed
+        return winningPlayer;
+
     }
 
     function legalSquare(square) {
         return square[0] < board.length && square[1] < board.length && square[0] >= 0 && square[1] >= 0; 
     }
 
+    function fullBoard() {
+        let count = 255;
+        for(let i = 0; i <15 ; i++) {
+            for (let j = 0; j < 15; j++) {
+                if ((board[i][j].classList.contains(playerOne.mark) || board[i][j].classList.contains(playerTwo.mark))) {
+                    count--;
+                } 
+            }
+        }
+    }
+
 
     function restartGame(player) {
-        const winningScreen = document.querySelector('.winning-message');
-        const winningMessage = document.querySelector('[data-winning-message-text]');
         winningScreen.classList.add('show');
+        if (player === 'tie') {
+            winningMessage.textContent = 'Tie Game';
+        }
         winningMessage.textContent = player.name + " Win";
-    
-        const winningButton = document.querySelector('#restartButton');
-        const cells = document.querySelectorAll('[data-cell]');
     
         winningButton.addEventListener('click', () => {
             winningScreen.classList.remove('show');
@@ -152,6 +265,7 @@ const boardModule = (() => {
         })
         return
     }
+
 })();
 
 
