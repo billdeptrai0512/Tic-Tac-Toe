@@ -22,10 +22,13 @@ body {
 }
 
 .cell.x::before, 
-.cell.x::after,
+.cell.x::after {
+    background-color: black;
+
+}
 .cell.o::before,
 .cell.o::after {
-    background-color: black;
+    background-color: red;
 }
 
 .board.x .cell:not(.x):not(.o):hover::before,
