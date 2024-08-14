@@ -1,5 +1,5 @@
 import { Board } from "./object/board.js"
-import { Player } from "./object/player.js"
+import { Player, AIPlayer } from "./object/player.js"
 import { Game } from "./object/game.js"
 // create 15x15 board 
 
@@ -8,6 +8,8 @@ import { Game } from "./object/game.js"
 // Allow user to make legal move
 // swtich turn
 // check for a win
+
+
 // create AI
 
 
@@ -17,18 +19,19 @@ const winningButton = document.querySelector('#restartButton');
 
 const startGame = (() => {
 
-    let playerOne = new Player("Bill" , "x");
-    let playerTwo = new Player("Diu Anh", "o");
+    const playerOne = new Player("Bill" , "x");
+    const playerTwo = new AIPlayer("Diu Anh", "o");
 
     const game = new Game(playerOne, playerTwo)
+
+    playerTwo.getGame(game)
 
     const board = new Board(15, 15, game)
 
     game.setBoard(board)
 
     game.getWinningItem(winningScreen, winningMessage, winningButton)
-
-    console.log(board)
+    
     
 
 })()
@@ -90,21 +93,6 @@ const startGame = (() => {
 //     }
 
 
-//     function restartGame(player) {
-//         winningScreen.classList.add('show');
-//         if (player === 'tie') {
-//             winningMessage.textContent = 'Tie Game';
-//         }
-//         winningMessage.textContent = player.name + " Win";
-    
-//         winningButton.addEventListener('click', () => {
-//             winningScreen.classList.remove('show');
-//             startGame();
-//         })
-//         return
-//     }
-
-// })();
 
 
 
