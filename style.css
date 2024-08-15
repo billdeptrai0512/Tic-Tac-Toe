@@ -4,6 +4,15 @@
 
 body {
     margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('./image/caro-background.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 :root {
@@ -12,14 +21,18 @@ body {
 }
 
 .board {
-    width: 100vw;
-    height: 100vh;
+    width: var(--cell-size) * 15;
+    height: var(--cell-size) * 15;
     display: grid;
     justify-content: center;
     align-content: center;
     align-items: center;
     grid-template-columns: repeat(15, auto);
-    grid-gap: 1px
+    background: linear-gradient(to bottom, #c9798a, #6960a4);
+    padding : 2em;
+    border-radius: 15px;
+    box-shadow: 1px 5px #473569 ;
+    
 }
 
 .cell.x::before, 
@@ -32,24 +45,15 @@ body {
     background-color: #eb6b80 ;
 }
 
-.board.x .cell:not(.x):not(.o):hover::before,
-.board.x .cell:not(.x):not(.o):hover::after,
-.board.o .cell:not(.x):not(.o):hover::before,
-.board.o .cell:not(.x):not(.o):hover::after {
-    background-color: lightgrey;
-}
-
-
-
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
-    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     cursor: pointer;
+    background-color: #ecebf4;
 }
 
 .cell.x,
@@ -100,26 +104,28 @@ body {
     background-color: white;
 }
 
-.cell:first-child,.cell:nth-child(2),.cell:nth-child(3),.cell:nth-child(4),.cell:nth-child(5),.cell:nth-child(6),.cell:nth-child(7),
-.cell:nth-child(8),.cell:nth-child(9),.cell:nth-child(10),.cell:nth-child(11),.cell:nth-child(12),.cell:nth-child(13),.cell:nth-child(14),
+.cell:first-child {
+    border-top-left-radius: 5px;
+}
+
 .cell:nth-child(15) {
-    border-top: none;
+    border-top-right-radius: 5px;
 }
 
-
-.cell:nth-child(15n+1) {
-    border-left: none;
-}
-
-.cell:nth-child(15n+15) {
-    border-right: none;
-}
-
-.cell:last-child,.cell:nth-child(224),.cell:nth-child(223),.cell:nth-child(222),.cell:nth-child(221),.cell:nth-child(220),.cell:nth-child(219),
-.cell:nth-child(218),.cell:nth-child(217),.cell:nth-child(216),.cell:nth-child(215),.cell:nth-child(214),.cell:nth-child(213),.cell:nth-child(212),
 .cell:nth-child(211) {
-    border-bottom: none;
+    border-bottom-left-radius: 5px;
 }
+
+.cell:nth-child(225) {
+    border-bottom-right-radius: 5px;
+}
+
+
+.cell:nth-child(2n) {
+   background-color: #cdcbe7;
+   
+}
+
 
 .winning-message {
     display: none;
@@ -138,9 +144,20 @@ body {
 }
 
 .winning-message button {
-    font-size: 2rem;
-    padding: .25em .5em;
+    background: linear-gradient(to bottom, #6a5acd, #483d8b); /* Tạo gradient từ sáng đến tối */
+    border: none;
+    border-radius: 25px; /* Bo góc tròn */
+    color: #f8d7f8; /* Màu chữ */
+    padding: 15px 30px;
+    font-size: 24px;
+    font-weight: bold;
+    /* font-family: 'Press Start 2P', cursive; Font giống như trong hình */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2), /* Shadow tổng thể */
+                inset 0px -5px 10px rgba(0, 0, 0, 0.3), /* Shadow bên trong để tạo chiều sâu */
+                inset 0px 5px 10px rgba(255, 255, 255, 0.5); /* Highlight phía trên */
+    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5); /* Đổ bóng cho chữ */
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .winning-message.show {
@@ -149,7 +166,7 @@ body {
 
 @media (max-width: 600px) {
     :root {
-        --cell-size: 30px; /* Reduced cell size for smaller screens */
+        --cell-size: 20px; /* Reduced cell size for smaller screens */
         --mark-size: calc(var(--cell-size) * .9);
     }
     
@@ -167,9 +184,9 @@ body {
 }
 
 /* Adjustments for larger screens (desktops) */
-@media (min-width: 1980px) {
+@media (min-width: 1920px) {
     :root {
-        --cell-size: 60px; /* Increased cell size for larger screens */
+        --cell-size: 50px; /* Increased cell size for larger screens */
         --mark-size: calc(var(--cell-size) * .9);
     }
 
