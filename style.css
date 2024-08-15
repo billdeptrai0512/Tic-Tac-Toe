@@ -172,6 +172,8 @@ body {
     
     .board {
         grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
+        padding : 0.75em;
+        
     }
 
     .winning-message {
@@ -191,7 +193,8 @@ body {
     }
 
     .board {
-        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with larger cell size */
+        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with larger cell size */  
+        padding : 2em;
     }
 
     .winning-message {
