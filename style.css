@@ -19,16 +19,17 @@ body {
     align-content: center;
     align-items: center;
     grid-template-columns: repeat(15, auto);
+    grid-gap: 1px
 }
 
 .cell.x::before, 
 .cell.x::after {
-    background-color: black;
+    background-color: #53b4e6 ;
 
 }
 .cell.o::before,
 .cell.o::after {
-    background-color: red;
+    background-color: #eb6b80 ;
 }
 
 .board.x .cell:not(.x):not(.o):hover::before,
@@ -144,4 +145,43 @@ body {
 
 .winning-message.show {
     display: flex;
+}
+
+@media (max-width: 600px) {
+    :root {
+        --cell-size: 30px; /* Reduced cell size for smaller screens */
+        --mark-size: calc(var(--cell-size) * .9);
+    }
+    
+    .board {
+        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
+    }
+
+    .winning-message {
+        font-size: 2rem; /* Smaller font size for winning message on mobile */
+    }
+
+    .winning-message button {
+        font-size: 1.5rem;
+    }
+}
+
+/* Adjustments for larger screens (desktops) */
+@media (min-width: 1980px) {
+    :root {
+        --cell-size: 60px; /* Increased cell size for larger screens */
+        --mark-size: calc(var(--cell-size) * .9);
+    }
+
+    .board {
+        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with larger cell size */
+    }
+
+    .winning-message {
+        font-size: 4rem; /* Larger font size for winning message on large screens */
+    }
+
+    .winning-message button {
+        font-size: 2.5rem;
+    }
 }

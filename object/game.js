@@ -126,9 +126,16 @@ export class Game {
 
             this.winningMessage.textContent = 'Tie Game';
 
+        }  
+
+        if (winningPlayer === this.playerTwo) {
+            console.log('hello')
+            this.winningMessage.textContent = this.playerTwo.winningLine
+        } else {
+            this.winningMessage.textContent = "Bạn chơi giỏi lắm. Respect 👍";
         }
 
-        this.winningMessage.textContent = winningPlayer.name + " Win";
+        
     
         this.winningButton.addEventListener('click', () => {
 

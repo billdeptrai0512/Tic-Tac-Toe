@@ -11,6 +11,22 @@ export class AIPlayer extends Player {
     constructor(name, mark) {
         super(name, mark)
         this.game = null
+        this.winningLine = this.pickRandomWiningLine()
+    }
+
+    pickRandomWiningLine() {
+
+        let winningLine = [
+            "Để tôi đoán, bạn đang giả vờ thua để tôi mất cảnh giác?",
+            "Bạn vừa thua kìa, chắc mạng lag đúng không?",
+            "Thua rồi à? Chắc do game bug chứ không phải tại bạn đâu, đúng không?",
+            "Bạn thua nhanh thế, có phải bạn đang vội đi đâu không?"
+        ]
+
+        let randomIndex = Math.floor(Math.random() * winningLine.length);
+
+        return winningLine[randomIndex]
+
     }
 
     getGame (game) {
@@ -51,9 +67,7 @@ export class AIPlayer extends Player {
 
         console.time("Find Best Move Time");
 
-        const cloneBoard = this.game.cloneBoard(board)
-
-        let bestMove = this.minimax(cloneBoard, 2, -Infinity, Infinity, false)
+        let bestMove = this.minimax(board, 2, -Infinity, Infinity, false)
 
         console.log(`${bestMove[1]} have ${bestMove[0]}`)
 
@@ -65,8 +79,6 @@ export class AIPlayer extends Player {
 
     minimax(board, depth, alpha, beta, isMaximizingPlayer) {
 
-
-        // Nếu trò chơi kết thúc (thắng, thua hoặc hòa), trả về điểm số
         if (depth === 0 || this.game.isBoardFull()) {
             return [this.game.evaluate(), null]
         }
@@ -80,10 +92,9 @@ export class AIPlayer extends Player {
             for (const move of possibleMoves) {
                 let x = move[0]
                 let y = move[1]
-                const cloneBoard = this.game.cloneBoard(board);
-                this.game.makeMove(cloneBoard, x, y, 'x');
-                let [evaluate, m] = this.minimax(cloneBoard, depth - 1, alpha, beta, false)
-                this.game.removeMark(cloneBoard, x, y, 'x');
+                this.game.makeMove(board, x, y, 'x');
+                let [evaluate, m] = this.minimax(board, depth - 1, alpha, beta, false)
+                this.game.removeMark(board, x, y, 'x');
 
                 if (evaluate > maxEval) {
                     maxEval = evaluate
@@ -105,10 +116,10 @@ export class AIPlayer extends Player {
             for (const move of possibleMoves) {
                 let x = move[0]
                 let y = move[1]
-                const cloneBoard = this.game.cloneBoard(board);
-                this.game.makeMove(cloneBoard, x, y, 'o');
-                let [evaluate, m] = this.minimax(cloneBoard, depth - 1, alpha, beta, true)
-                this.game.removeMark(cloneBoard, x, y, 'o');
+
+                this.game.makeMove(board, x, y, 'o');
+                let [evaluate, m] = this.minimax(board, depth - 1, alpha, beta, true)
+                this.game.removeMark(board, x, y, 'o');
 
                 if (evaluate < minEval) {
                     minEval = evaluate
@@ -125,6 +136,7 @@ export class AIPlayer extends Player {
         }
 
     }
+
 }
 
 
