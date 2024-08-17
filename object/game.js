@@ -14,22 +14,61 @@ const FOUR_OPPONENT = -40000000;
 const FOUR_OBSTACLE_OPPONENT = -5000000;
 const LOSING = -1000000000;
 
+const winningScreen = document.getElementById('winning');
+const losingScreen = document.getElementById('losing');
+const winningMessage = document.querySelector('[data-winning-message-text]');
+const winningButton = document.getElementById('winningButton')
+const losingButton = document.getElementById('losingButton')
+
 export class Game {
 
-    constructor(playerOne, playerTwo) {   
-        this.playerOne = playerOne
-        this.playerTwo = playerTwo
-        this.currentPlayer = playerOne
-        this.Board = null
-        this.board = null
-        this.winningScreen = null
-        this.winningMessage = null
-        this.winningButton = null
+    constructor() {   
+        this.self
+        this.board
+        this.cells
+        this.playerOne
+        this.playerTwo
+        this.currentPlayer
+        
     }
 
     setBoard(board) {
-        this.Board = board
-        this.board = board.cells
+
+        this.board = board
+
+        this.cells = board.cells
+
+        return 
+
+    }
+
+    setPlayer(playerOne, playerTwo) {   
+
+        this.playerOne = playerOne
+
+        this.playerTwo = playerTwo
+
+        this.currentPlayer = playerOne
+
+        return 
+
+    }
+
+    getWinningItem() {
+
+        this.winningScreen = winningScreen
+
+        console.log(this.winningScreen)
+
+        this.losingScreen = losingScreen
+
+        console.log(this.losingScreen)
+
+        this.winningButton = winningButton
+
+        this.losingButton = losingButton
+
+        return 
     }
 
     cloneBoard(board) {
@@ -40,35 +79,6 @@ export class Game {
 
     switchTurn() {
         this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
-    }
-
-    handleClick(e) {
-
-        const cell = e.target
-
-        if (cell.classList.contains('x') || cell.classList.contains('o')) {
-            return
-        }
-
-        const mark = this.currentPlayer.mark
-
-        cell.classList.add(mark)
-
-        const index = this.getLastMove(cell)
-
-        const winningPlayer = this.checkWin(mark, index)
-
-        if (winningPlayer) {
-
-            console.log('we have the winner')
-
-            this.restartGame(winningPlayer)
-        }
-
-        this.switchTurn()
-
-        return this.AImakeMove()
-
     }
 
     makeMove(board, row, col, mark) {
@@ -89,38 +99,44 @@ export class Game {
 
     AImakeMove() {
 
-        const findMove = this.currentPlayer.findBestMove(this.board)
+        const findMove = this.playerTwo.findBestMove(this.cells)
 
         const bestMove = findMove[1]
 
-        this.makeMove(this.board, bestMove[0], bestMove[1], this.currentPlayer.mark)
+        this.makeMove(this.cells, bestMove[0], bestMove[1], this.currentPlayer.mark)
 
         const AIwinning = this.checkWin(this.currentPlayer.mark, bestMove)
 
         if (AIwinning) {
 
-            this.restartGame(AIwinning)
-    
+            return this.restartGame(AIwinning)
+
+        } else {
+
+            return this.switchTurn()
+
         }
 
-        return this.switchTurn()
+
 
     }
 
-    getWinningItem(winningScreen, winningMessage, winningButton) {
-
-        this.winningScreen = winningScreen
-
-        this.winningMessage = winningMessage
-
-        this.winningButton = winningButton
-
-        return 
-    }
 
     restartGame(winningPlayer) {
 
-        this.winningScreen.classList.add('show');
+        console.log(this.winningScreen)
+
+        if (winningPlayer === this.playerOne) {
+            this.winningScreen.classList.add('show');
+        } 
+
+        if (winningPlayer === this.playerTwo) {
+
+            this.switchTurn()
+
+            this.losingScreen.classList.add('show');
+
+        }
 
         if (winningPlayer === 'tie') {
 
@@ -128,21 +144,21 @@ export class Game {
 
         }  
 
-        if (winningPlayer === this.playerTwo) {
-            console.log('hello')
-            this.winningMessage.textContent = this.playerTwo.winningLine
-        } else {
-            this.winningMessage.textContent = "Bạn chơi giỏi lắm. Respect 👍";
-        }
-
         
-    
+
         this.winningButton.addEventListener('click', () => {
 
             this.winningScreen.classList.remove('show');
 
-            this.Board.createBoard(15, 15);
+            this.board.createBoard(15, 15);
 
+        })
+
+        this.losingButton.addEventListener('click', () => {
+
+            this.losingScreen.classList.remove('show');
+
+            this.board.createBoard(15, 15);
         })
 
         return
@@ -183,7 +199,7 @@ export class Game {
                 return this.currentPlayer;
             }
 
-            if (this.isBoardFull(this.board) && (count < requiredToWin)) {
+            if (this.isBoardFull(this.cells) && (count < requiredToWin)) {
                 return console.log('stop this loop tie game')
             }
         }
@@ -199,7 +215,7 @@ export class Game {
         row += dRow;
         col += dCol;
 
-        while (this.legalSquare(row, col) && this.board[row][col].classList.contains(mark)) {
+        while (this.legalSquare(row, col) && this.cells[row][col].classList.contains(mark)) {
             count++;
             row += dRow;
             col += dCol;
@@ -211,18 +227,18 @@ export class Game {
 
     legalSquare(row, col) {
 
-        return row >= 0 && col >= 0 && row < this.board.length && col < this.board[0].length;
+        return row >= 0 && col >= 0 && row < this.cells.length && col < this.cells[0].length;
 
     }
 
     isBoardFull() {
 
-        for (let row = 0; row < this.board.length; row++) {
+        for (let row = 0; row < this.cells.length; row++) {
 
-            for (let col = 0; col < this.board[row].length; col++) {
+            for (let col = 0; col < this.cells[row].length; col++) {
 
-                if (!this.board[row][col].classList.contains('x') && 
-                    !this.board[row][col].classList.contains('o')) {
+                if (!this.cells[row][col].classList.contains('x') && 
+                    !this.cells[row][col].classList.contains('o')) {
                     return false;
                 }
 
@@ -383,11 +399,11 @@ export class Game {
     
     getAllRows() {
         const rows = [];
-        for (let r = 0; r < this.board.length; r++) {
+        for (let r = 0; r < this.cells.length; r++) {
             const row = [];
-            for (let c = 0; c < this.board[r].length; c++) {
-                row.push(this.board[r][c].classList.contains('x') ? 'x' :
-                         this.board[r][c].classList.contains('o') ? 'o' : '.');
+            for (let c = 0; c < this.cells[r].length; c++) {
+                row.push(this.cells[r][c].classList.contains('x') ? 'x' :
+                         this.cells[r][c].classList.contains('o') ? 'o' : '.');
             }
             rows.push(row);
         }
@@ -397,11 +413,11 @@ export class Game {
 
     getAllColumns() {
         const columns = [];
-        for (let c = 0; c < this.board[0].length; c++) {
+        for (let c = 0; c < this.cells[0].length; c++) {
             const column = [];
-            for (let r = 0; r < this.board.length; r++) {
-                column.push(this.board[r][c].classList.contains('x') ? 'x' :
-                            this.board[r][c].classList.contains('o') ? 'o' : '.');
+            for (let r = 0; r < this.cells.length; r++) {
+                column.push(this.cells[r][c].classList.contains('x') ? 'x' :
+                            this.cells[r][c].classList.contains('o') ? 'o' : '.');
             }
             columns.push(column);
         }
@@ -412,47 +428,44 @@ export class Game {
         const diagonals = [];
     
         // Các đường chéo từ trái sang phải
-        for (let r = 0; r < this.board.length; r++) {
+        for (let r = 0; r < this.cells.length; r++) {
             const diagonal = [];
-            for (let d = 0; d + r < this.board.length && d < this.board[r].length; d++) {
-                diagonal.push(this.board[r + d][d].classList.contains('x') ? 'x' :
-                              this.board[r + d][d].classList.contains('o') ? 'o' : '.');
+            for (let d = 0; d + r < this.cells.length && d < this.cells[r].length; d++) {
+                diagonal.push(this.cells[r + d][d].classList.contains('x') ? 'x' :
+                              this.cells[r + d][d].classList.contains('o') ? 'o' : '.');
             }
             diagonals.push(diagonal);
         }
     
-        for (let c = 1; c < this.board[0].length; c++) {
+        for (let c = 1; c < this.cells[0].length; c++) {
             const diagonal = [];
-            for (let d = 0; d < this.board.length && d + c < this.board[0].length; d++) {
-                diagonal.push(this.board[d][c + d].classList.contains('x') ? 'x' :
-                              this.board[d][c + d].classList.contains('o') ? 'o' : '.');
+            for (let d = 0; d < this.cells.length && d + c < this.cells[0].length; d++) {
+                diagonal.push(this.cells[d][c + d].classList.contains('x') ? 'x' :
+                              this.cells[d][c + d].classList.contains('o') ? 'o' : '.');
             }
             diagonals.push(diagonal);
         }
     
         // Các đường chéo từ phải sang trái
-        for (let r = 0; r < this.board.length; r++) {
+        for (let r = 0; r < this.cells.length; r++) {
             const diagonal = [];
-            for (let d = 0; d + r < this.board.length && d < this.board[r].length; d++) {
-                diagonal.push(this.board[r + d][this.board[r].length - 1 - d].classList.contains('x') ? 'x' :
-                              this.board[r + d][this.board[r].length - 1 - d].classList.contains('o') ? 'o' : '.');
+            for (let d = 0; d + r < this.cells.length && d < this.cells[r].length; d++) {
+                diagonal.push(this.cells[r + d][this.cells[r].length - 1 - d].classList.contains('x') ? 'x' :
+                              this.cells[r + d][this.cells[r].length - 1 - d].classList.contains('o') ? 'o' : '.');
             }
             diagonals.push(diagonal);
         }
     
-        for (let c = this.board[0].length - 2; c >= 0; c--) {
+        for (let c = this.cells[0].length - 2; c >= 0; c--) {
             const diagonal = [];
-            for (let d = 0; d < this.board.length && c - d >= 0; d++) {
-                diagonal.push(this.board[d][c - d].classList.contains('x') ? 'x' :
-                              this.board[d][c - d].classList.contains('o') ? 'o' : '.');
+            for (let d = 0; d < this.cells.length && c - d >= 0; d++) {
+                diagonal.push(this.cells[d][c - d].classList.contains('x') ? 'x' :
+                              this.cells[d][c - d].classList.contains('o') ? 'o' : '.');
             }
             diagonals.push(diagonal);
         }
     
         return diagonals;
     }
-    
-    
-
     
 }

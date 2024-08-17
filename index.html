@@ -7,11 +7,47 @@
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
-    <div class="board" id="board"></div>
-
-    <div class="winning-message">
-        <div data-winning-message-text></div>
-        <button id="restartButton">Restart</button>
+    <div class="board" id="board">
+    </div>
+    <div class= "ending-screen" id= "winning" >
+        <div class="img">
+            <img src="./image/respect.png" id="respect">
+            <img src="./image/fired.png" id="fired">
+        </div>
+        <div class="winning-message">
+            <div data-winning-message-text1>Ghê đó fen!</div>
+            <div data-winning-message-text2 style="color: #FFC42E">Respect</div>
+        </div>
+        <button class="restartButton" id="winningButton">Chơi Tiếp</button>
+    </div>
+    <div class= "ending-screen" id="losing">
+        <div class="img">
+            <img src="./image/lose.png" id="lose">
+        </div>
+        <div class="losing-message">
+            <div data-losing-message-text1>Thua mất tiu... </div>
+            <div data-losing-message-text2 style="color: #CECCE7">UwU</div>
+        </div>
+        <button class="restartButton" id="losingButton">Thử lại</button>
+    </div>
+    <div class="status">
+        <div class="small-board" >
+            <div class="round" id="text">
+                ROUND
+            </div>
+            <div class="round" id="number">
+                1
+            </div>
+        </div>
+        <div class="small-board" >
+            <img src="./image/cup.png" id="cup">
+            <div class="points" id="text">
+                POINTS
+            </div>
+            <div class="points" id="number">
+                10
+            </div>
+        </div>
     </div>
 </body>
 <script type="module" src="script.js"></script>

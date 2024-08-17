@@ -11,7 +11,6 @@ export class AIPlayer extends Player {
     constructor(name, mark) {
         super(name, mark)
         this.game = null
-        this.winningLine = this.pickRandomWiningLine()
     }
 
     pickRandomWiningLine() {
