@@ -31,7 +31,6 @@ body {
 
 .status .small-board {
     display: grid;
-    flex-direction: column;
     width: calc(var(--cell-size) * 5.5);
     height: calc(var(--cell-size) * 5.5);
     justify-content: center;
@@ -279,16 +278,42 @@ body {
     transition: all 0.3s ease;
 }
 
-
-
-@media (max-width: 850px) {
+@media (max-width: 400px) {
     :root {
-        --cell-size: 20px; /* Reduced cell size for smaller screens */
+        --cell-size: 22.5px; /* Reduced cell size for smaller screens */
         --mark-size: calc(var(--cell-size) * .9);
     }
 
     body {
         flex-direction: column-reverse;
+    }
+
+    .status {
+        display: flex;
+        flex-direction: row;
+        width: calc(var(--cell-size) * 16);
+        height: calc(var(--cell-size) * 8);
+        margin-left: 0;
+        gap: 8.5rem
+    }
+
+    .status #points {
+        transform: translate(0, -3.15rem);
+    }
+
+    .status #points img {
+        transform: translate(-7.5rem, 7.5rem);
+    }
+
+
+    .status .small-board .round#text,
+    .status .small-board .points#text {
+        font-size: calc(var(--cell-size) * 0.8);
+    }
+
+    .status .small-board .round#number,
+    .status .small-board .points#number {
+        font-size: calc(var(--cell-size) * 2.5);
     }
     
     .board {
@@ -297,13 +322,208 @@ body {
         
     }
 
-    .winning-message {
+    .ending-screen#winning {
+        transform: translate(0);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .ending-screen .img #respect {
+        height:5rem;
+        width: 5rem;
+        transform: translate(-1.5rem , 6.5rem );
+    }
+
+    .ending-screen .img #fired {
+        width: 8rem;
+        height: 8rem;
+        transform: translate(-35%, 90%)
+    }
+
+    .ending-screen .img #lose {
+        width: 15rem;
+        height: 3rem;
+        transform: translate(0%, 140%)
+    }
+
+    .ending-screen#losing {
+        transform: translate(0, 2.5rem);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .winning-message,
+    .losing-message {
         font-size: 1rem; /* Smaller font size for winning message on mobile */
     }
 
-    .winning-message button {
+    #winningButton, #losingButton {
         font-size: 1rem;
-        padding: 5px 15px;
+        padding: 5px 10px;
     }
 }
 
+@media (min-width: 400px) and (max-width: 768px) {
+    :root {
+        --cell-size: 25px; /* Reduced cell size for smaller screens */
+        --mark-size: calc(var(--cell-size) * .9);
+    }
+
+    body {
+        flex-direction: column-reverse;
+    }
+
+    .status {
+        display: flex;
+        flex-direction: row;
+        width: calc(var(--cell-size) * 16);
+        height: calc(var(--cell-size) * 8);
+        margin-left: 0;
+        gap: 8.5rem
+    }
+
+    .status #points {
+        transform: translate(0, -3.15rem);
+    }
+
+    .status #points img {
+        transform: translate(-7.5rem, 7.5rem);
+    }
+
+
+    .status .small-board .round#text,
+    .status .small-board .points#text {
+        font-size: calc(var(--cell-size) * 0.8);
+    }
+
+    .status .small-board .round#number,
+    .status .small-board .points#number {
+        font-size: calc(var(--cell-size) * 2.5);
+    }
+    
+    .board {
+        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
+        padding : 0.75em;
+        
+    }
+
+    .ending-screen#winning {
+        transform: translate(0);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .ending-screen .img #respect {
+        height:5rem;
+        width: 5rem;
+        transform: translate(-1.5rem , 6.5rem );
+    }
+
+    .ending-screen .img #fired {
+        width: 8rem;
+        height: 8rem;
+        transform: translate(-35%, 90%)
+    }
+
+    .ending-screen .img #lose {
+        width: 15rem;
+        height: 3rem;
+        transform: translate(0%, 140%)
+    }
+
+    .ending-screen#losing {
+        transform: translate(0, 2.5rem);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .winning-message,
+    .losing-message {
+        font-size: 1rem; /* Smaller font size for winning message on mobile */
+    }
+
+    #winningButton, #losingButton {
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+}
+
+
+@media (min-width: 800px) and (max-width: 1024px) {
+    :root {
+        --cell-size: 45px; /* Reduced cell size for smaller screens */
+        --mark-size: calc(var(--cell-size) * .9);
+    }
+
+    body {
+        flex-direction: column-reverse;
+    }
+
+    .status {
+        display: flex;
+        flex-direction: row;
+        width: calc(var(--cell-size) * 16);
+        height: calc(var(--cell-size) * 8);
+        margin-left: 0;
+        gap: 14rem
+    }
+
+    .status #points {
+        transform: translate(0, -6.2rem);
+    }
+
+    .status #points img {
+        transform: translate(-13.5rem, 13.5rem);
+    }
+
+
+    .status .small-board .round#text,
+    .status .small-board .points#text {
+        font-size: calc(var(--cell-size) * 0.8);
+    }
+
+    .status .small-board .round#number,
+    .status .small-board .points#number {
+        font-size: calc(var(--cell-size) * 2.5);
+    }
+    
+    .board {
+        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
+        padding : 0.75em;
+        
+    }
+
+    .ending-screen#winning {
+        transform: translate(0);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .ending-screen .img #respect {
+        height: 10rem;
+        width: 10rem;
+        transform: translate(-3.5rem , 11.5rem );
+    }
+
+    .ending-screen .img #fired {
+        width: 14rem;
+        height: 14rem;
+        transform: translate(-35%, 90%)
+    }
+
+    .ending-screen .img #lose {
+        width: 30rem;
+        height: 6rem;
+        transform: translate(0%, 140%)
+    }
+
+    .ending-screen#losing {
+        transform: translate(0, 2.5rem);
+        width: calc(var(--cell-size) * 16)
+    }
+
+    .winning-message,
+    .losing-message {
+        font-size: 2rem; /* Smaller font size for winning message on mobile */
+    }
+
+    #winningButton, #losingButton {
+        font-size: 2rem;
+        padding: 5px 10px;
+    }
+}
