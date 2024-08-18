@@ -22,8 +22,6 @@ const losingButton = document.getElementById('losingButton')
 const roundNumber = document.querySelector('#number.round')
 const pointsNumber = document.querySelector('#number.points')
 
-console.log(roundNumber)
-console.log(pointsNumber)
 export class Game {
 
     constructor() {   
@@ -114,13 +112,15 @@ export class Game {
     }
 
     switchTurn() {
-        this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
+        return this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
     }
 
     makeMove(board, row, col, mark) {
         if (!board[row][col].classList.contains('x') && 
             !board[row][col].classList.contains('o')) {
-            
+
+            this.board.highlight(board[row][col])
+
             return board[row][col].classList.add(mark);
         }
 
@@ -145,8 +145,8 @@ export class Game {
 
         if (AIwinning) {
 
-            return this.restartGame(AIwinning)
-
+            return setTimeout(() => this.restartGame(AIwinning), 1500)
+             
         } else {
 
             return this.switchTurn()
@@ -156,7 +156,6 @@ export class Game {
 
 
     }
-
 
     restartGame(winningPlayer) {
 
@@ -215,6 +214,16 @@ export class Game {
             count += this.countMarks(mark, lastRow, lastCol, -dRow, -dCol);
 
             if (count >= requiredToWin) {
+
+                for (let r = 0; r < 15; r++) {
+
+                    for (let c = 0; c < 15; c++) {
+        
+                        this.cells[r][c].style.cursor = 'not-allowed'
+                        
+                    }
+                }
+
                 return this.currentPlayer;
             }
 
@@ -230,17 +239,23 @@ export class Game {
     countMarks(mark, row, col, dRow, dCol) {
 
         let count = 0;
+        let winningArray = []
         
         row += dRow;
         col += dCol;
 
         while (this.legalSquare(row, col) && this.cells[row][col].classList.contains(mark)) {
             count++;
+            winningArray.push(this.cells[row][col])
             row += dRow;
             col += dCol;
-
+            
         }
-    
+
+        if (winningArray.length === 4) {
+            this.board.highlightWinning(winningArray)
+        }
+        
         return count;
     }
 

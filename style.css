@@ -129,6 +129,11 @@ body {
     cursor: not-allowed;
 }
 
+.cell.x.highlight,
+.cell.o.highlight{
+    background-color: #FFE5A4 !important
+}
+
 .cell.x::before,
 .cell.x::after,
 .board.x .cell:not(.x):not(.o):hover::before,
@@ -280,7 +285,7 @@ body {
 
 @media (max-width: 400px) {
     :root {
-        --cell-size: 22.5px; /* Reduced cell size for smaller screens */
+        --cell-size: 20px; /* Reduced cell size for smaller screens */
         --mark-size: calc(var(--cell-size) * .9);
     }
 
@@ -292,17 +297,17 @@ body {
         display: flex;
         flex-direction: row;
         width: calc(var(--cell-size) * 16);
-        height: calc(var(--cell-size) * 8);
+        height: calc(var(--cell-size) * 10);
         margin-left: 0;
-        gap: 8.5rem
+        gap: 7.5rem
     }
 
     .status #points {
-        transform: translate(0, -3.15rem);
+        transform: translate(0, -2.7rem);
     }
 
     .status #points img {
-        transform: translate(-7.5rem, 7.5rem);
+        transform: translate(-6.3rem, 6.5rem);
     }
 
 
@@ -443,7 +448,6 @@ body {
         padding: 5px 10px;
     }
 }
-
 
 @media (min-width: 800px) and (max-width: 1024px) {
     :root {

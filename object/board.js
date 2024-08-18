@@ -58,6 +58,8 @@ export class Board {
 
         cell.classList.add(mark)
 
+        this.highlight(cell)
+
         const index = this.game.getLastMove(cell)
 
         const winningPlayer = this.game.checkWin(mark, index)
@@ -66,7 +68,7 @@ export class Board {
 
             console.log('we have the winner')
 
-            return this.game.restartGame(winningPlayer)
+            return setTimeout(() => this.game.restartGame(winningPlayer), 1500)
 
         } else {
 
@@ -75,6 +77,40 @@ export class Board {
             return this.game.AImakeMove()
 
         }
+
+    }
+
+    highlight(cell) {
+
+        for (let r = 0; r < 15; r++) {
+
+            for (let c = 0; c < 15; c++) {
+
+                if (this.cells[r][c].classList.contains('highlight')) {
+                    this.cells[r][c].classList.remove('highlight')
+                }
+                
+            }
+        }
+        
+        return cell.classList.add('highlight')
+
+    }
+
+    highlightWinning(array) {
+
+        let index = 0
+
+        const intervalID = setInterval(() => {
+            if (index < 4) {
+                array[index].classList.add('highlight')
+                index++
+            } else {
+                clearInterval(intervalID)
+            }
+        }, 300)
+
+        return
 
     }
 
