@@ -19,7 +19,11 @@ const losingScreen = document.getElementById('losing');
 const winningMessage = document.querySelector('[data-winning-message-text]');
 const winningButton = document.getElementById('winningButton')
 const losingButton = document.getElementById('losingButton')
+const roundNumber = document.querySelector('#number.round')
+const pointsNumber = document.querySelector('#number.points')
 
+console.log(roundNumber)
+console.log(pointsNumber)
 export class Game {
 
     constructor() {   
@@ -29,7 +33,8 @@ export class Game {
         this.playerOne
         this.playerTwo
         this.currentPlayer
-        
+        this.round 
+        this.points 
     }
 
     setBoard(board) {
@@ -58,15 +63,46 @@ export class Game {
 
         this.winningScreen = winningScreen
 
-        console.log(this.winningScreen)
-
         this.losingScreen = losingScreen
-
-        console.log(this.losingScreen)
 
         this.winningButton = winningButton
 
         this.losingButton = losingButton
+
+        this.round = parseInt(roundNumber.innerHTML)
+        
+        this.points = parseInt(pointsNumber.innerHTML)
+
+        this.winningButton.addEventListener('click', () => {
+
+            this.winningScreen.classList.remove('show');
+
+            this.round += 1
+
+            this.points += 10
+
+            roundNumber.innerHTML = this.round
+
+            pointsNumber.innerHTML = this.points
+
+            this.board.createBoard(15, 15);
+
+        })
+
+        this.losingButton.addEventListener('click', () => {
+
+            this.losingScreen.classList.remove('show');
+
+            this.round += 1
+
+            this.points -= 1
+
+            roundNumber.innerHTML = this.round
+
+            pointsNumber.innerHTML = this.points
+
+            this.board.createBoard(15, 15);
+        })
 
         return 
     }
@@ -143,23 +179,6 @@ export class Game {
             this.winningMessage.textContent = 'Tie Game';
 
         }  
-
-        
-
-        this.winningButton.addEventListener('click', () => {
-
-            this.winningScreen.classList.remove('show');
-
-            this.board.createBoard(15, 15);
-
-        })
-
-        this.losingButton.addEventListener('click', () => {
-
-            this.losingScreen.classList.remove('show');
-
-            this.board.createBoard(15, 15);
-        })
 
         return
     }
