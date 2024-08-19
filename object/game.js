@@ -90,39 +90,53 @@ export class Game {
         return 
     }
 
-    cloneBoard(board) {
+    // cloneBoard(board) {
 
-        return board.map(row => row.slice());
+    //     return board.map(row => row.slice());
 
-    }
+    // }
 
     switchTurn() {
-        return this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
+
+        this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
+
+        if (this.currentPlayer === this.playerTwo) {
+
+            return this.display_AIMove()
+
+        }
+
     }
 
     makeMove(board, row, col, mark) {
-        if (!board[row][col].classList.contains('x') && 
-            !board[row][col].classList.contains('o')) {
+
+        const cell = board[row][col]
+
+        if (!cell.classList.contains('x') && !cell.classList.contains('o')) {
 
             this.board.highlight(board[row][col])
 
-            return board[row][col].classList.add(mark);
+            return cell.classList.add(mark);
         }
 
     }
 
     removeMark(board, row, col, mark) {
 
-        return board[row][col].classList.remove(mark);
+        const cell = board[row][col]
+
+        return cell.classList.remove(mark);
 
 
     }
 
-    AImakeMove() {
+    async display_AIMove() {
 
-        const findMove = this.playerTwo.findBestMove(this.cells)
+        const bestMove = await this.playerTwo.findBestMove(this.cells)
+                                            .then(result => result[1])
 
-        const bestMove = findMove[1]
+
+        console.log(bestMove)
 
         this.makeMove(this.cells, bestMove[0], bestMove[1], this.currentPlayer.mark)
 
@@ -132,14 +146,10 @@ export class Game {
 
             return setTimeout(() => this.restartGame(AIwinning), 1500)
              
-        } else {
+        } 
 
-            return this.switchTurn()
-
-        }
-
-
-
+    return this.switchTurn()
+    
     }
 
     restartGame(winningPlayer) {
@@ -195,7 +205,7 @@ export class Game {
 
     checkWin(mark, lastMove) {
         console.log(`Checking win for mark: ${mark} at position: ${lastMove}`);
-
+        console.time('checkWin')
         const directions = [
             { row: 0, col: 1 },  // Horizontal right
             { row: 1, col: 0 },  // Vertical down
@@ -226,6 +236,8 @@ export class Game {
                     }
                 }
 
+                console.timeEnd('end CheckWin')
+
                 this.isOver = true
 
                 return this.currentPlayer;
@@ -236,6 +248,7 @@ export class Game {
             }
         }
 
+        console.timeEnd('checkWin')
         return null;
         
     }

@@ -36,17 +36,20 @@ export class Board {
         
         let cell = document.createElement("div")
 
-        cell.classList.add("cell");
-        cell.setAttribute("data-cell", "");
-        cell.setAttribute("data-row", row);
-        cell.setAttribute("data-column", column);
+        cell.classList.add("cell")
+
+        // cell.setAttribute("data-cell", ""); content
+
+        cell.setAttribute("row", row);
+        cell.setAttribute("column", column);
+
         cell.addEventListener('click', (e) => this.handleClick(e) , { once: true})
 
         return cell
 
     }
 
-    handleClick(e) {
+    async handleClick(e) {
 
         if (this.game.isOver) {
             return
@@ -54,37 +57,65 @@ export class Board {
 
         const cell = e.target
 
-        if (cell.classList.contains('x') || cell.classList.contains('o')) {
-            return
-        }
+        const [row, col] = [cell.attributes.row.value, cell.attributes.column.value]
 
         const mark = this.game.currentPlayer.mark
 
-        cell.classList.add(mark)
+        console.log(row, col)
 
-        this.highlight(cell)
+        this.displayMove(cell, mark)
 
-        const index = this.game.getLastMove(cell)
+        const winningPlayer = this.game.checkWin(mark, [row, col])
 
-        const winningPlayer = this.game.checkWin(mark, index)
+        console.log(winningPlayer)
+
+        // const index = this.game.getLastMove(cell)
 
         if (winningPlayer) {
 
-            console.log('we have the winner')
-
             return setTimeout(() => this.game.restartGame(winningPlayer), 1500)
 
-        } else {
-
-            this.game.switchTurn()
-
-            return this.game.AImakeMove()
-
         }
+
+        return this.game.switchTurn()
+
+        // if (winningPlayer) {
+
+        //     console.log('we have the winner')
+
+        //     return setTimeout(() => this.game.restartGame(winningPlayer), 1500)
+
+        // } else {
+
+        //     this.game.switchTurn()
+
+        //     return this.game.display_AIMove()
+
+        // }
+        
+    }
+
+    displayMove(cell, mark) {
+
+        if (cell.classList.contains('x') || cell.classList.contains('o')) {
+            return
+        }
+        
+        this.highlight(cell);        
+
+        return cell.classList.add(mark);
 
     }
 
     highlight(cell) {
+
+        this.cleanLastHighLight()
+        
+        return cell.classList.add('highlight')
+
+    }
+
+    cleanLastHighLight() {
 
         for (let r = 0; r < 15; r++) {
 
@@ -96,8 +127,6 @@ export class Board {
                 
             }
         }
-        
-        return cell.classList.add('highlight')
 
     }
 
@@ -119,3 +148,5 @@ export class Board {
     }
 
 }
+
+

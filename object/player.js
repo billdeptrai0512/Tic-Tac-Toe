@@ -66,7 +66,7 @@ export class AIPlayer extends Player {
 
         console.time("Find Best Move Time");
 
-        const bestMove = await this.minimax(board, 3, -Infinity, Infinity, false)
+        const bestMove =  this.minimax(board, 3, -Infinity, Infinity, false)
 
         console.log(`${bestMove[1]} have ${bestMove[0]}`)
 
