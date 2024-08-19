@@ -62,11 +62,27 @@ export class AIPlayer extends Player {
         return Array.from(moves).map(move => move.split(',').map(Number));;
     }
 
-    async findBestMove(board) {
+    getBoardKey(board) {
+        let key = '';
+        for (let r = 0; r < board.length; r++) {
+            for (let c = 0; c < board[r].length; c++) {
+                if (board[r][c].classList.contains('x')) {
+                    key += 'x';
+                } else if (board[r][c].classList.contains('o')) {
+                    key += 'o';
+                } else {
+                    key += '.';
+                }
+            }
+        }
+        return key;
+    }
+
+    findBestMove(board) {
 
         console.time("Find Best Move Time");
 
-        const bestMove =  this.minimax(board, 3, -Infinity, Infinity, false)
+        const bestMove = this.minimax(board, 2, -Infinity, Infinity, false)
 
         console.log(`${bestMove[1]} have ${bestMove[0]}`)
 
@@ -78,8 +94,10 @@ export class AIPlayer extends Player {
 
     minimax(board, depth, alpha, beta, isMaximizingPlayer) {
 
-        if (depth === 0 || this.game.isBoardFull()) {
-            return [this.game.evaluate(), null]
+
+        if (depth === 0 || this.game.isBoardFull() || this.game.isOver) {
+            const evalValue = [this.game.evaluate(), null];
+            return evalValue
         }
 
         const possibleMoves = this.getPossibleMoves(board)
@@ -87,13 +105,16 @@ export class AIPlayer extends Player {
         if (isMaximizingPlayer) {
             let maxEval = -Infinity;    
             let bestMove = possibleMoves[0]
-
+            
             for (const move of possibleMoves) {
                 let x = move[0]
                 let y = move[1]
+
                 this.game.makeMove(board, x, y, 'x');
                 let [evaluate, m] = this.minimax(board, depth - 1, alpha, beta, false)
                 this.game.removeMark(board, x, y, 'x');
+
+                console.log(`Depth: ${depth}, Move: [${x}, ${y}], Eval: ${evaluate}, Alpha: ${alpha}, Beta: ${beta}`);
 
                 if (evaluate > maxEval) {
                     maxEval = evaluate
@@ -105,7 +126,9 @@ export class AIPlayer extends Player {
                 if (beta <= alpha) break;
             }
 
-            return [maxEval, bestMove]
+            const result = [maxEval, bestMove];
+
+            return result
             
     
         } else {
@@ -115,10 +138,11 @@ export class AIPlayer extends Player {
             for (const move of possibleMoves) {
                 let x = move[0]
                 let y = move[1]
-
                 this.game.makeMove(board, x, y, 'o');
                 let [evaluate, m] = this.minimax(board, depth - 1, alpha, beta, true)
                 this.game.removeMark(board, x, y, 'o');
+
+                console.log(`Depth: ${depth}, Move: [${x}, ${y}], Eval: ${evaluate}, Alpha: ${alpha}, Beta: ${beta}`);
 
                 if (evaluate < minEval) {
                     minEval = evaluate
@@ -130,10 +154,12 @@ export class AIPlayer extends Player {
                 if (beta <= alpha) break;
             }
 
-            return [minEval, bestMove]
+            const result = [minEval, bestMove];;
+
+            return result;
             
         }
-
+        
     }
 
 }

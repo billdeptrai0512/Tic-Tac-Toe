@@ -1,16 +1,16 @@
 const TWO = 10;
 const TWO_OBSTACLE = 5;
 const THREE = 1000;
-const THREE_OBSTACLE = 500;
-const FOUR = 30000000;
-const FOUR_OBSTACLE = 2000000;
-const WINNING = 2000000000;
+const THREE_OBSTACLE = 100;
+const FOUR = 1000000;
+const FOUR_OBSTACLE = 100000;
+const WINNING = 1000000000;
 
-const TWO_OPPONENT = -20;
-const TWO_OBSTACLE_OPPONENT = -3;
-const THREE_OPPONENT = -2000;
-const THREE_OBSTACLE_OPPONENT = -750;
-const FOUR_OPPONENT = -40000000;
+const TWO_OPPONENT = -50;
+const TWO_OBSTACLE_OPPONENT = -25;
+const THREE_OPPONENT = -5000;
+const THREE_OBSTACLE_OPPONENT = -2500;
+const FOUR_OPPONENT = -10000000;
 const FOUR_OBSTACLE_OPPONENT = -5000000;
 const LOSING = -1000000000;
 
@@ -76,6 +76,8 @@ export class Game {
 
             this.winningScreen.classList.remove('show');
 
+            this.isOver = false
+
             this.board.createBoard(15, 15);
 
         })
@@ -83,6 +85,8 @@ export class Game {
         this.losingButton.addEventListener('click', () => {
 
             this.losingScreen.classList.remove('show');
+
+            this.isOver = false
 
             this.board.createBoard(15, 15);
         })
@@ -96,13 +100,31 @@ export class Game {
 
     // }
 
-    switchTurn() {
+    async switchTurn() {
 
         this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
 
         if (this.currentPlayer === this.playerTwo) {
 
-            return this.display_AIMove()
+            const bestMove = await this.playerTwo.findBestMove(this.cells)
+                                    
+            // console.log(bestMove)
+
+            if (bestMove) {
+
+                this.display_AIMove(bestMove[1])
+
+                const AIwinning = this.checkWin(this.currentPlayer.mark, bestMove[1])
+
+                if (AIwinning) {
+
+                    return setTimeout(() => this.restartGame(AIwinning), 1500)
+                    
+                } 
+
+            }
+            
+            this.currentPlayer = this.playerOne
 
         }
 
@@ -130,25 +152,11 @@ export class Game {
 
     }
 
-    async display_AIMove() {
-
-        const bestMove = await this.playerTwo.findBestMove(this.cells)
-                                            .then(result => result[1])
-
+    display_AIMove(bestMove) {
 
         console.log(bestMove)
 
-        this.makeMove(this.cells, bestMove[0], bestMove[1], this.currentPlayer.mark)
-
-        const AIwinning = this.checkWin(this.currentPlayer.mark, bestMove)
-
-        if (AIwinning) {
-
-            return setTimeout(() => this.restartGame(AIwinning), 1500)
-             
-        } 
-
-    return this.switchTurn()
+        return this.makeMove(this.cells, bestMove[0], bestMove[1], this.currentPlayer.mark)
     
     }
 
@@ -191,7 +199,7 @@ export class Game {
 
         }  
 
-        return this.isOver = false
+        return 
     }
 
     getLastMove(cell) {
@@ -204,8 +212,10 @@ export class Game {
     }
 
     checkWin(mark, lastMove) {
+
         console.log(`Checking win for mark: ${mark} at position: ${lastMove}`);
         console.time('checkWin')
+
         const directions = [
             { row: 0, col: 1 },  // Horizontal right
             { row: 1, col: 0 },  // Vertical down
@@ -214,9 +224,11 @@ export class Game {
         ];
 
         const requiredToWin = 5;
-        const [lastRow, lastCol] = lastMove;
+        const [lastRow, lastCol] = (lastMove);
+        
         
         for (let { row: dRow, col: dCol } of directions) {
+
             let count = 1;
             
             // Check in the positive direction
@@ -227,16 +239,7 @@ export class Game {
 
             if (count >= requiredToWin) {
 
-                for (let r = 0; r < 15; r++) {
-
-                    for (let c = 0; c < 15; c++) {
-        
-                        this.cells[r][c].style.cursor = 'not-allowed'
-                        
-                    }
-                }
-
-                console.timeEnd('end CheckWin')
+                this.board.cancelCells()
 
                 this.isOver = true
 
@@ -260,7 +263,7 @@ export class Game {
         
         row += dRow;
         col += dCol;
-
+        
         while (this.legalSquare(row, col) && this.cells[row][col].classList.contains(mark)) {
             count++;
             winningArray.push(this.cells[row][col])
@@ -312,6 +315,7 @@ export class Game {
                        this.computeSequences(columns, 'o') + 
                        this.computeSequences(diagonals, 'o');
 
+        // console.log(xScore, oScore)
 
         return xScore - oScore
     }
@@ -417,6 +421,18 @@ export class Game {
                     obstacle_opponent = 0;
                 }
             });
+
+                        if (player !== 0) {
+                if (player === 2 && obstacle_opponent === 0 && obstacle === 0) {
+                    result += TWO_OBSTACLE;
+                } else if (player === 3 && obstacle_opponent === 0 && obstacle === 0) {
+                    result += THREE_OBSTACLE;
+                } else if (player === 4 && obstacle_opponent === 0 && obstacle === 0) {
+                    result += FOUR_OBSTACLE;
+                } else if (player === 5) {
+                    result += WINNING;
+                }
+            }
     
             if (opponent !== 0) {
                 if (opponent === 2 && obstacle_player === 0 && obstacle === 0) {
@@ -430,17 +446,6 @@ export class Game {
                 }
             }
     
-            if (player !== 0) {
-                if (player === 2 && obstacle_opponent === 0 && obstacle === 0) {
-                    result += TWO_OBSTACLE;
-                } else if (player === 3 && obstacle_opponent === 0 && obstacle === 0) {
-                    result += THREE_OBSTACLE;
-                } else if (player === 4 && obstacle_opponent === 0 && obstacle === 0) {
-                    result += FOUR_OBSTACLE;
-                } else if (player === 5) {
-                    result += WINNING;
-                }
-            }
         });
 
         // console.log(`this is ${result} point for ${mark}`)

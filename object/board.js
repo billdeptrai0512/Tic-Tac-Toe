@@ -49,6 +49,19 @@ export class Board {
 
     }
 
+    cancelCells() {
+
+        for (let r = 0; r < 15; r++) {
+
+            for (let c = 0; c < 15; c++) {
+
+                this.cells[r][c].style.cursor = 'not-allowed'
+                
+            }
+        }
+
+    }
+
     async handleClick(e) {
 
         if (this.game.isOver) {
@@ -57,19 +70,19 @@ export class Board {
 
         const cell = e.target
 
-        const [row, col] = [cell.attributes.row.value, cell.attributes.column.value]
+        if (cell.classList.contains('x') || cell.classList.contains('o')) {
+            return
+        }
+
+        const [row, col] = [parseInt(cell.attributes.row.value), parseInt(cell.attributes.column.value)]
 
         const mark = this.game.currentPlayer.mark
 
-        console.log(row, col)
-
         this.displayMove(cell, mark)
 
+        await new Promise(resolve => setTimeout(resolve, 0));
+
         const winningPlayer = this.game.checkWin(mark, [row, col])
-
-        console.log(winningPlayer)
-
-        // const index = this.game.getLastMove(cell)
 
         if (winningPlayer) {
 
@@ -77,30 +90,12 @@ export class Board {
 
         }
 
-        return this.game.switchTurn()
-
-        // if (winningPlayer) {
-
-        //     console.log('we have the winner')
-
-        //     return setTimeout(() => this.game.restartGame(winningPlayer), 1500)
-
-        // } else {
-
-        //     this.game.switchTurn()
-
-        //     return this.game.display_AIMove()
-
-        // }
+        await this.game.switchTurn()
         
     }
 
     displayMove(cell, mark) {
 
-        if (cell.classList.contains('x') || cell.classList.contains('o')) {
-            return
-        }
-        
         this.highlight(cell);        
 
         return cell.classList.add(mark);
