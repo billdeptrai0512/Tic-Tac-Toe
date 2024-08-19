@@ -62,11 +62,11 @@ export class AIPlayer extends Player {
         return Array.from(moves).map(move => move.split(',').map(Number));;
     }
 
-    findBestMove(board) {
+    async findBestMove(board) {
 
         console.time("Find Best Move Time");
 
-        let bestMove = this.minimax(board, 3, -Infinity, Infinity, false)
+        const bestMove = await this.minimax(board, 3, -Infinity, Infinity, false)
 
         console.log(`${bestMove[1]} have ${bestMove[0]}`)
 
