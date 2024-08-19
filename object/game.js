@@ -76,14 +76,6 @@ export class Game {
 
             this.winningScreen.classList.remove('show');
 
-            this.round += 1
-
-            this.points += 10
-
-            roundNumber.innerHTML = this.round
-
-            pointsNumber.innerHTML = this.points
-
             this.board.createBoard(15, 15);
 
         })
@@ -91,14 +83,6 @@ export class Game {
         this.losingButton.addEventListener('click', () => {
 
             this.losingScreen.classList.remove('show');
-
-            this.round += 1
-
-            this.points -= 1
-
-            roundNumber.innerHTML = this.round
-
-            pointsNumber.innerHTML = this.points
 
             this.board.createBoard(15, 15);
         })
@@ -163,12 +147,29 @@ export class Game {
         console.log(this.winningScreen)
 
         if (winningPlayer === this.playerOne) {
+
+            this.round += 1
+
+            this.points += 10
+
+            roundNumber.innerHTML = this.round
+
+            pointsNumber.innerHTML = this.points
+            
             this.winningScreen.classList.add('show');
         } 
 
         if (winningPlayer === this.playerTwo) {
 
             this.switchTurn()
+
+            this.round += 1
+
+            this.points -= 1
+
+            roundNumber.innerHTML = this.round
+
+            pointsNumber.innerHTML = this.points
 
             this.losingScreen.classList.add('show');
 
