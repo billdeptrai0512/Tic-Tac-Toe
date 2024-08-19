@@ -48,6 +48,10 @@ export class Board {
 
     handleClick(e) {
 
+        if (this.game.isOver) {
+            return
+        }
+
         const cell = e.target
 
         if (cell.classList.contains('x') || cell.classList.contains('o')) {
