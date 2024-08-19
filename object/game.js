@@ -33,6 +33,7 @@ export class Game {
         this.currentPlayer
         this.round 
         this.points 
+        this.isOver = false
     }
 
     setBoard(board) {
@@ -179,7 +180,7 @@ export class Game {
 
         }  
 
-        return
+        return this.isOver = false
     }
 
     getLastMove(cell) {
@@ -223,6 +224,8 @@ export class Game {
                         
                     }
                 }
+
+                this.isOver = true
 
                 return this.currentPlayer;
             }
