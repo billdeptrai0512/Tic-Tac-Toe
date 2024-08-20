@@ -62,36 +62,43 @@ export class Board {
 
     }
 
-    async handleClick(e) {
+    isClear() {
 
-        if (this.game.isOver) {
-            return
+        let array = []
+
+        for (let r = 0; r < 15; r++) {
+
+            for (let c = 0; c < 15; c++) {
+
+                if (this.cells[r][c].classList.contains('x') || this.cells[r][c].classList.contains('o')) {
+                    array.push(this.cells[r][c])
+                }
+                
+            }
         }
 
-        const cell = e.target
-
-        if (cell.classList.contains('x') || cell.classList.contains('o')) {
-            return
+        if (array.length !== 0) {
+            return false
         }
 
-        const [row, col] = [parseInt(cell.attributes.row.value), parseInt(cell.attributes.column.value)]
+        return true
 
-        const mark = this.game.currentPlayer.mark
+    }
 
-        this.displayMove(cell, mark)
+    isFull() {
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        for (let row = 0; row < this.cells.length; row++) {
 
-        const winningPlayer = this.game.checkWin(mark, [row, col])
+            for (let col = 0; col < this.cells[row].length; col++) {
 
-        if (winningPlayer) {
+                if (!this.cells[row][col].classList.contains('x') && 
+                    !this.cells[row][col].classList.contains('o')) {
+                    return false;
+                }
 
-            return setTimeout(() => this.game.restartGame(winningPlayer), 1500)
-
+            }
         }
-
-        await this.game.switchTurn()
-        
+        return true;
     }
 
     displayMove(cell, mark) {
@@ -141,6 +148,30 @@ export class Board {
         return
 
     }
+
+    async handleClick(e) {
+
+        if (this.game.isOver) {
+            return
+        }
+
+        const cell = e.target
+
+        if (cell.classList.contains('x') || cell.classList.contains('o')) {
+            return
+        }
+
+        const mark = this.game.playerOne.mark
+
+        this.displayMove(cell, mark)
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        return this.game.checkWin(mark, cell)
+        
+    }
+
+
 
 }
 

@@ -31,6 +31,7 @@ export class Game {
         this.playerOne
         this.playerTwo
         this.currentPlayer
+        this.firstPlayer2Move
         this.round 
         this.points 
         this.isOver = false
@@ -53,6 +54,8 @@ export class Game {
         this.playerTwo = playerTwo
 
         this.currentPlayer = playerOne
+
+        this.firstPlayer2Move = playerOne
 
         return 
 
@@ -80,6 +83,8 @@ export class Game {
 
             this.board.createBoard(15, 15);
 
+            this.startGame()
+
         })
 
         this.losingButton.addEventListener('click', () => {
@@ -89,45 +94,11 @@ export class Game {
             this.isOver = false
 
             this.board.createBoard(15, 15);
+
+            this.startGame()
         })
 
         return 
-    }
-
-    // cloneBoard(board) {
-
-    //     return board.map(row => row.slice());
-
-    // }
-
-    async switchTurn() {
-
-        this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
-
-        if (this.currentPlayer === this.playerTwo) {
-
-            const bestMove = await this.playerTwo.findBestMove(this.cells)
-                                    
-            // console.log(bestMove)
-
-            if (bestMove) {
-
-                this.display_AIMove(bestMove[1])
-
-                const AIwinning = this.checkWin(this.currentPlayer.mark, bestMove[1])
-
-                if (AIwinning) {
-
-                    return setTimeout(() => this.restartGame(AIwinning), 1500)
-                    
-                } 
-
-            }
-            
-            this.currentPlayer = this.playerOne
-
-        }
-
     }
 
     makeMove(board, row, col, mark) {
@@ -136,7 +107,7 @@ export class Game {
 
         if (!cell.classList.contains('x') && !cell.classList.contains('o')) {
 
-            this.board.highlight(board[row][col])
+            this.board.highlight(cell)
 
             return cell.classList.add(mark);
         }
@@ -149,24 +120,53 @@ export class Game {
 
         return cell.classList.remove(mark);
 
+    }
+
+    async switchTurn() {
+
+        this.currentPlayer = this.currentPlayer === this.playerOne ? this.playerTwo : this.playerOne
+
+        if (this.currentPlayer === this.playerTwo) {
+
+            const mark = this.playerTwo.mark
+
+            const bestMove = await this.playerTwo.findBestMove(this.cells)
+
+            if (bestMove) {
+
+                const cell = this.cells[bestMove[1][0]][bestMove[1][1]]
+
+                this.board.displayMove(cell, mark)
+
+                this.checkWin(mark, cell)
+
+            }
+
+        } 
 
     }
 
-    display_AIMove(bestMove) {
+    startGame() {
 
-        console.log(bestMove)
+        this.firstPlayer2Move = this.firstPlayer2Move === this.playerOne ? this.playerTwo : this.playerOne;
 
-        return this.makeMove(this.cells, bestMove[0], bestMove[1], this.currentPlayer.mark)
-    
+        if (this.firstPlayer2Move === this.playerTwo) {
+
+            this.currentPlayer = this.playerTwo
+
+            this.makeMove(this.cells, 7, 7, this.firstPlayer2Move.mark)
+
+            return this.switchTurn()
+
+        }
+
     }
 
-    restartGame(winningPlayer) {
-
-        console.log(this.winningScreen)
+    endGame(winningPlayer) {
 
         if (winningPlayer === this.playerOne) {
 
-            this.round += 1
+            this.round -= 1
 
             this.points += 10
 
@@ -179,11 +179,9 @@ export class Game {
 
         if (winningPlayer === this.playerTwo) {
 
-            this.switchTurn()
+            this.round -= 1
 
-            this.round += 1
-
-            this.points -= 1
+            this.points -= 2
 
             roundNumber.innerHTML = this.round
 
@@ -199,22 +197,10 @@ export class Game {
 
         }  
 
-        return 
+        return this.switchTurn()
     }
 
-    getLastMove(cell) {
-
-        const row = cell.getAttribute('data-row')
-        const column = cell.getAttribute('data-column')
-
-        return [parseInt(row), parseInt(column)]
-
-    }
-
-    checkWin(mark, lastMove) {
-
-        console.log(`Checking win for mark: ${mark} at position: ${lastMove}`);
-        console.time('checkWin')
+    checkWin(mark, cell) {
 
         const directions = [
             { row: 0, col: 1 },  // Horizontal right
@@ -224,7 +210,7 @@ export class Game {
         ];
 
         const requiredToWin = 5;
-        const [lastRow, lastCol] = (lastMove);
+        const [lastRow, lastCol] = [parseInt(cell.attributes.row.value), parseInt(cell.attributes.column.value)];
         
         
         for (let { row: dRow, col: dCol } of directions) {
@@ -242,17 +228,16 @@ export class Game {
                 this.board.cancelCells()
 
                 this.isOver = true
-
-                return this.currentPlayer;
+                
+                return setTimeout(() => this.endGame(this.currentPlayer), 1500);
             }
 
-            if (this.isBoardFull(this.cells) && (count < requiredToWin)) {
+            if (this.board.isFull() && (count < requiredToWin)) {
                 return console.log('stop this loop tie game')
             }
         }
 
-        console.timeEnd('checkWin')
-        return null;
+        return this.switchTurn();
         
     }
 
@@ -283,22 +268,6 @@ export class Game {
 
         return row >= 0 && col >= 0 && row < this.cells.length && col < this.cells[0].length;
 
-    }
-
-    isBoardFull() {
-
-        for (let row = 0; row < this.cells.length; row++) {
-
-            for (let col = 0; col < this.cells[row].length; col++) {
-
-                if (!this.cells[row][col].classList.contains('x') && 
-                    !this.cells[row][col].classList.contains('o')) {
-                    return false;
-                }
-
-            }
-        }
-        return true;
     }
 
     evaluate() {

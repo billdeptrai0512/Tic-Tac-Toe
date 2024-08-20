@@ -26,7 +26,7 @@ body {
     justify-content: center;
     width: calc(var(--cell-size) * 5);
     height: calc(var(--cell-size) * 16);
-    margin-left: calc(var(--cell-size) * 1.5)
+    margin-left: calc(var(--cell-size) * 1.5);
 }
 
 .status .small-board {
@@ -78,12 +78,12 @@ body {
 }
 
 .status .small-board .points#number {
-    color: #FFC42E
+    color: #FFC42E;
 }
 
 .status .small-board img {
-    width: calc(var(--cell-size) * 4.5); 
-    height: calc(var(--cell-size) * 4.5); 
+    width: calc(var(--cell-size) * 4.5);
+    height: calc(var(--cell-size) * 4.5);
     transform: translate(2rem, 2rem);
 }
 
@@ -96,21 +96,21 @@ body {
     align-items: center;
     grid-template-columns: repeat(15, auto);
     background: linear-gradient(to bottom, #c9798a, #6960a4);
-    padding : 2em;
+    padding: 2em;
     border-radius: 15px;
-    box-shadow: 1px 5px #473569 ;
+    box-shadow: 1px 5px #473569;
     position: relative;
-    z-index:1;
+    z-index: 1;
 }
 
 .cell.x::before, 
 .cell.x::after {
-    background-color: #53b4e6 ;
-
+    background-color: #53b4e6;
 }
+
 .cell.o::before,
 .cell.o::after {
-    background-color: #eb6b80 ;
+    background-color: #eb6b80;
 }
 
 .cell {
@@ -130,8 +130,8 @@ body {
 }
 
 .cell.x.highlight,
-.cell.o.highlight{
-    background-color: #FFE5A4 !important
+.cell.o.highlight {
+    background-color: #FFE5A4 !important;
 }
 
 .cell.x::before,
@@ -161,7 +161,6 @@ body {
     content: '';
     position: absolute;
     border-radius: 50%;
-    
 }
 
 .cell.o::before,
@@ -193,10 +192,8 @@ body {
     border-bottom-right-radius: 5px;
 }
 
-
 .cell:nth-child(2n) {
-   background-color: #cdcbe7;
-   
+    background-color: #cdcbe7;
 }
 
 .ending-screen#winning,
@@ -211,14 +208,12 @@ body {
     flex-direction: column;
     align-items: center;
     gap: var(--cell-size);
-
 }
 
 .ending-screen.show#winning,
 .ending-screen.show#losing {
     display: flex;
 }
-
 
 .winning-message {
     display: flex;
@@ -231,7 +226,7 @@ body {
     color: white;
     flex-direction: column;
     background: linear-gradient(to bottom, #b70e21, #890917);
-    gap: 0.75rem
+    gap: 0.75rem;
 }
 
 .losing-message {
@@ -245,47 +240,49 @@ body {
     color: white;
     flex-direction: column;
     background: #5A5A5A;
-    gap: 0.75rem
+    gap: 0.75rem;
 }
 
 .ending-screen .img #respect {
     width: 15rem;
     height: 15rem;
-    transform: translate(-45%, 101%)
+    transform: translate(-45%, 101%);
 }
 
 .ending-screen .img #fired {
     width: 20rem;
     height: 20rem;
-    transform: translate(-35%, 80%)
+    transform: translate(-35%, 80%);
 }
 
 .ending-screen .img #lose {
     width: 40rem;
     height: 8rem;
-    transform: translate(0%, 120%)
+    transform: translate(0%, 120%);
 }
 
-
 .restartButton {
-    background: linear-gradient(to bottom, #6a5acd, #483d8b); /* Tạo gradient từ sáng đến tối */
+    background: linear-gradient(to bottom, #6a5acd, #483d8b);
     border: none;
-    border-radius: 25px; /* Bo góc tròn */
-    color: #f8d7f8; /* Màu chữ */
+    border-radius: 25px;
+    color: #f8d7f8;
     padding: 15px 30px;
     font-size: 24px;
     font-weight: bold;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2), /* Shadow tổng thể */
-                inset 0px -5px 10px rgba(0, 0, 0, 0.3), /* Shadow bên trong để tạo chiều sâu */
-                inset 0px 5px 10px rgba(255, 255, 255, 0.5); /* Highlight phía trên */
-    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5); /* Đổ bóng cho chữ */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0px -5px 10px rgba(0, 0, 0, 0.3),
+                inset 0px 5px 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
+/* Media queries for responsiveness */
+
+/* Small Mobile Devices (up to 400px) */
 @media (max-width: 400px) {
     :root {
-        --cell-size: 20px; /* Reduced cell size for smaller screens */
+        --cell-size: 20px;
         --mark-size: calc(var(--cell-size) * .9);
     }
 
@@ -299,7 +296,7 @@ body {
         width: calc(var(--cell-size) * 16);
         height: calc(var(--cell-size) * 10);
         margin-left: 0;
-        gap: 7.5rem
+        gap: 7.5rem;
     }
 
     .status #points {
@@ -310,7 +307,6 @@ body {
         transform: translate(-6.3rem, 6.5rem);
     }
 
-
     .status .small-board .round#text,
     .status .small-board .points#text {
         font-size: calc(var(--cell-size) * 0.8);
@@ -320,44 +316,39 @@ body {
     .status .small-board .points#number {
         font-size: calc(var(--cell-size) * 2.5);
     }
-    
+
     .board {
-        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
-        padding : 0.75em;
-        
+        grid-template-columns: repeat(15, var(--cell-size));
+        padding: 0.75em;
     }
 
-    .ending-screen#winning {
-        transform: translate(0);
-        width: calc(var(--cell-size) * 16)
+    .ending-screen#winning,
+    .ending-screen#losing {
+        transform: translate(0, 0);
+        width: calc(var(--cell-size) * 16);
     }
 
     .ending-screen .img #respect {
-        height:5rem;
+        height: 5rem;
         width: 5rem;
-        transform: translate(-1.5rem , 6.5rem );
+        transform: translate(-1.5rem, 6.5rem);
     }
 
     .ending-screen .img #fired {
         width: 8rem;
         height: 8rem;
-        transform: translate(-35%, 90%)
+        transform: translate(-35%, 90%);
     }
 
     .ending-screen .img #lose {
         width: 15rem;
         height: 3rem;
-        transform: translate(0%, 140%)
-    }
-
-    .ending-screen#losing {
-        transform: translate(0, 2.5rem);
-        width: calc(var(--cell-size) * 16)
+        transform: translate(0%, 140%);
     }
 
     .winning-message,
     .losing-message {
-        font-size: 1rem; /* Smaller font size for winning message on mobile */
+        font-size: 1rem;
     }
 
     #winningButton, #losingButton {
@@ -366,9 +357,10 @@ body {
     }
 }
 
-@media (min-width: 400px) and (max-width: 768px) {
+/* Tablets and Small Devices (401px to 768px) */
+@media (min-width: 401px) and (max-width: 767px) {
     :root {
-        --cell-size: 25px; /* Reduced cell size for smaller screens */
+        --cell-size: 25px;
         --mark-size: calc(var(--cell-size) * .9);
     }
 
@@ -382,7 +374,7 @@ body {
         width: calc(var(--cell-size) * 16);
         height: calc(var(--cell-size) * 8);
         margin-left: 0;
-        gap: 8.5rem
+        gap: 8.5rem;
     }
 
     .status #points {
@@ -393,7 +385,6 @@ body {
         transform: translate(-7.5rem, 7.5rem);
     }
 
-
     .status .small-board .round#text,
     .status .small-board .points#text {
         font-size: calc(var(--cell-size) * 0.8);
@@ -403,44 +394,39 @@ body {
     .status .small-board .points#number {
         font-size: calc(var(--cell-size) * 2.5);
     }
-    
+
     .board {
-        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
-        padding : 0.75em;
-        
+        grid-template-columns: repeat(15, var(--cell-size));
+        padding: 0.75em;
     }
 
-    .ending-screen#winning {
-        transform: translate(0);
-        width: calc(var(--cell-size) * 16)
+    .ending-screen#winning,
+    .ending-screen#losing {
+        transform: translate(0, 0);
+        width: calc(var(--cell-size) * 16);
     }
 
     .ending-screen .img #respect {
-        height:5rem;
+        height: 5rem;
         width: 5rem;
-        transform: translate(-1.5rem , 6.5rem );
+        transform: translate(-1.5rem, 6.5rem);
     }
 
     .ending-screen .img #fired {
         width: 8rem;
         height: 8rem;
-        transform: translate(-35%, 90%)
+        transform: translate(-35%, 90%);
     }
 
     .ending-screen .img #lose {
         width: 15rem;
         height: 3rem;
-        transform: translate(0%, 140%)
-    }
-
-    .ending-screen#losing {
-        transform: translate(0, 2.5rem);
-        width: calc(var(--cell-size) * 16)
+        transform: translate(0%, 140%);
     }
 
     .winning-message,
     .losing-message {
-        font-size: 1rem; /* Smaller font size for winning message on mobile */
+        font-size: 1rem;
     }
 
     #winningButton, #losingButton {
@@ -449,9 +435,89 @@ body {
     }
 }
 
-@media (min-width: 800px) and (max-width: 1024px) {
+@media (width: 768px) {
     :root {
-        --cell-size: 45px; /* Reduced cell size for smaller screens */
+        --cell-size: 30px; /* Adjust cell size specifically for 768px width */
+        --mark-size: calc(var(--cell-size) * .9);
+    }
+
+    body {
+        flex-direction: column-reverse;
+        background-size: cover; /* Ensure the background covers the screen properly */
+    }
+
+    .status {
+        display: flex;
+        flex-direction: row;
+        width: calc(var(--cell-size) * 16);
+        height: calc(var(--cell-size) * 9); /* Adjust height for this width */
+        margin-left: 0;
+        gap: 10rem; /* Adjust gap between elements */
+    }
+
+    .status #points {
+        transform: translate(0, -4rem); /* Adjust positioning */
+    }
+
+    .status #points img {
+        transform: translate(-8.75rem, 9rem); /* Adjust image positioning */
+    }
+
+    .status .small-board .round#text,
+    .status .small-board .points#text {
+        font-size: calc(var(--cell-size) * 0.9); /* Slightly larger text for better visibility */
+    }
+
+    .status .small-board .round#number,
+    .status .small-board .points#number {
+        font-size: calc(var(--cell-size) * 2.7); /* Adjust number size */
+    }
+
+    .board {
+        grid-template-columns: repeat(15, var(--cell-size));
+        padding: 1em; /* Slightly more padding for better layout */
+    }
+
+    .ending-screen#winning,
+    .ending-screen#losing {
+        transform: translate(0, 0);
+        width: calc(var(--cell-size) * 15); /* Adjust screen size */
+    }
+
+    .ending-screen .img #respect {
+        height: 8rem;
+        width: 8rem;
+        transform: translate(-3rem, 9rem); /* Adjust image positioning */
+    }
+
+    .ending-screen .img #fired {
+        width: 12rem;
+        height: 12rem;
+        transform: translate(-35%, 90%); /* Adjust image positioning */
+    }
+
+    .ending-screen .img #lose {
+        width: 25rem;
+        height: 5rem;
+        transform: translate(0%, 140%); /* Adjust image positioning */
+    }
+
+    .winning-message,
+    .losing-message {
+        font-size: 1.5rem; /* Font size adjustment for better visibility */
+    }
+
+    #winningButton, #losingButton {
+        font-size: 1.5rem;
+        padding: 8px 15px; /* Adjust button padding and font size */
+    }
+}
+
+
+/* Larger Tablets and Small Desktops (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root {
+        --cell-size: 45px;
         --mark-size: calc(var(--cell-size) * .9);
     }
 
@@ -465,7 +531,7 @@ body {
         width: calc(var(--cell-size) * 16);
         height: calc(var(--cell-size) * 8);
         margin-left: 0;
-        gap: 14rem
+        gap: 14rem;
     }
 
     .status #points {
@@ -476,7 +542,6 @@ body {
         transform: translate(-13.5rem, 13.5rem);
     }
 
-
     .status .small-board .round#text,
     .status .small-board .points#text {
         font-size: calc(var(--cell-size) * 0.8);
@@ -486,44 +551,39 @@ body {
     .status .small-board .points#number {
         font-size: calc(var(--cell-size) * 2.5);
     }
-    
+
     .board {
-        grid-template-columns: repeat(15, var(--cell-size)); /* Ensure grid adjusts with smaller cell size */
-        padding : 0.75em;
-        
+        grid-template-columns: repeat(15, var(--cell-size));
+        padding: 0.75em;
     }
 
-    .ending-screen#winning {
-        transform: translate(0);
-        width: calc(var(--cell-size) * 16)
+    .ending-screen#winning,
+    .ending-screen#losing {
+        transform: translate(0, 0);
+        width: calc(var(--cell-size) * 16);
     }
 
     .ending-screen .img #respect {
         height: 10rem;
         width: 10rem;
-        transform: translate(-3.5rem , 11.5rem );
+        transform: translate(-3.5rem, 11.5rem);
     }
 
     .ending-screen .img #fired {
         width: 14rem;
         height: 14rem;
-        transform: translate(-35%, 90%)
+        transform: translate(-35%, 90%);
     }
 
     .ending-screen .img #lose {
         width: 30rem;
         height: 6rem;
-        transform: translate(0%, 140%)
-    }
-
-    .ending-screen#losing {
-        transform: translate(0, 2.5rem);
-        width: calc(var(--cell-size) * 16)
+        transform: translate(0%, 140%);
     }
 
     .winning-message,
     .losing-message {
-        font-size: 2rem; /* Smaller font size for winning message on mobile */
+        font-size: 2rem;
     }
 
     #winningButton, #losingButton {

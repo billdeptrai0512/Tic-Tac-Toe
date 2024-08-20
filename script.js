@@ -17,15 +17,11 @@ const startGame = (() => {
 
     game.setBoard(board)
 
-    console.log(board)
-
     game.setPlayer(playerOne, playerTwo)
 
-    playerTwo.getGame(game)
-
-    game.setBoard(board)
-
     game.getWinningItem()
+
+    playerTwo.getGame(game)
     
 
 })()

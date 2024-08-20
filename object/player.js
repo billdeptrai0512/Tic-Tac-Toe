@@ -32,6 +32,28 @@ export class AIPlayer extends Player {
         return this.game = game
     }
 
+    // async takeTurn() {
+
+    //     const bestMove = await this.findBestMove(this.cells)
+
+    //     if (bestMove) {
+
+    //         this.display_AIMove(bestMove[1])
+
+    //         const AIwinning = this.game.checkWin(this.currentPlayer.mark, bestMove[1])
+
+    //         if (AIwinning) {
+
+    //                 return setTimeout(() => this.game.restartGame(AIwinning), 1500)
+                    
+    //         } 
+
+    //     }
+            
+    //     this.currentPlayer = this.playerOne
+
+    // }
+
     getPossibleMoves(board) {
 
         const moves = new Set()
@@ -62,21 +84,13 @@ export class AIPlayer extends Player {
         return Array.from(moves).map(move => move.split(',').map(Number));;
     }
 
-    getBoardKey(board) {
-        let key = '';
-        for (let r = 0; r < board.length; r++) {
-            for (let c = 0; c < board[r].length; c++) {
-                if (board[r][c].classList.contains('x')) {
-                    key += 'x';
-                } else if (board[r][c].classList.contains('o')) {
-                    key += 'o';
-                } else {
-                    key += '.';
-                }
-            }
-        }
-        return key;
-    }
+    // evaluateMove(board, move, isMaximizingPlayer) {
+    //     const [x, y] = move;
+    //     this.game.makeMove(board, x, y, isMaximizingPlayer ? 'x' : 'o');
+    //     const score = this.game.evaluate();
+    //     this.game.removeMark(board, x, y, isMaximizingPlayer ? 'x' : 'o');
+    //     return score;
+    // }
 
     findBestMove(board) {
 
@@ -95,12 +109,18 @@ export class AIPlayer extends Player {
     minimax(board, depth, alpha, beta, isMaximizingPlayer) {
 
 
-        if (depth === 0 || this.game.isBoardFull() || this.game.isOver) {
+        if (depth === 0 || this.game.board.isFull() || this.game.isOver) {
             const evalValue = [this.game.evaluate(), null];
             return evalValue
         }
 
         const possibleMoves = this.getPossibleMoves(board)
+
+        console.log(possibleMoves)
+
+        // const possibleMoves = this.getPossibleMoves(board).sort((a,b) => {
+        //     return this.evaluateMove(board, b, isMaximizingPlayer) - this.evaluateMove(board, a, isMaximizingPlayer);
+        // })
 
         if (isMaximizingPlayer) {
             let maxEval = -Infinity;    
