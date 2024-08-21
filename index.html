@@ -7,8 +7,6 @@
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
-    <div class="board" id="board">
-    </div>
     <div class= "ending-screen" id= "winning" >
         <div class="img">
             <img src="./image/respect.png" id="respect">
@@ -39,8 +37,10 @@
                 10
             </div>
         </div>
-        <div class="small-board" id="points">
+        <div class="small-board" id="img">
             <img src="./image/cup.png" id="cup">
+        </div>
+        <div class="small-board" id="points">
             <div class="points" id="text">
                 POINTS
             </div>
@@ -49,6 +49,11 @@
             </div>
         </div>
     </div>
+    <div class="board-wrapper">
+        <div class="board" id="board">
+        </div>
+    </div>
+    
 </body>
 <script type="module" src="script.js"></script>
 </html>
